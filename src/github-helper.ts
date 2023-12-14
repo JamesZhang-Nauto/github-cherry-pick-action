@@ -71,28 +71,28 @@ export async function createPullRequest(
       body
     })
 
-    // // Apply labels
-    // const appliedLabels = inputs.labels
+    // Apply labels
+    const appliedLabels = inputs.labels
 
-    // if (inputs.inherit_labels) {
-    //   const prLabels = pull_request.labels
-    //   if (prLabels) {
-    //     for (const item of prLabels) {
-    //       if (item.name !== inputs.branch) {
-    //         appliedLabels.push(item.name)
-    //       }
-    //     }
-    //   }
-    // }
-    // if (appliedLabels.length > 0) {
-    //   core.info(`Applying labels '${appliedLabels}'`)
-    //   await octokit.rest.issues.addLabels({
-    //     owner,
-    //     repo,
-    //     issue_number: pull.data.number,
-    //     labels: appliedLabels
-    //   })
-    // }
+    if (inputs.inherit_labels) {
+      const prLabels = pull_request.labels
+      if (prLabels) {
+        for (const item of prLabels) {
+          if (item.name !== inputs.branch) {
+            appliedLabels.push(item.name)
+          }
+        }
+      }
+    }
+    if (appliedLabels.length > 0) {
+      core.info(`Applying labels '${appliedLabels}'`)
+      await octokit.rest.issues.addLabels({
+        owner,
+        repo,
+        issue_number: pull.data.number,
+        labels: true
+      })
+    }
 
     // Apply assignees
     if (inputs.assignees.length > 0) {

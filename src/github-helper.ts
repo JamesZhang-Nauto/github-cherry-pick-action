@@ -85,14 +85,17 @@ export async function createPullRequest(
       }
     }
     if (appliedLabels.length > 0) {
-      core.info(`Applying labels '${appliedLabels}'`)
+      core.info(`Applying labels '${JSON.stringify(inputs.labels)}'`)
       await octokit.rest.issues.addLabels({
         owner,
         repo,
         issue_number: pull.data.number,
-        labels: true
+        labels: inputs.allowUserToSpecifyBranchViaLabel
+          ? utils.filterIrrelevantBranchLabels(inputs, inputs.labels, branch)
+          : inputs.labels
       })
     }
+  
 
     // Apply assignees
     if (inputs.assignees.length > 0) {

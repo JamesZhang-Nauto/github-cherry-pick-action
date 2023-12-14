@@ -56,3 +56,15 @@ export function parseDisplayNameEmail(
 
   return {name, email}
 }
+
+
+export function filterIrrelevantBranchLabels(
+  inputs: Inputs,
+  labels: string[],
+  branch: string
+): string[] {
+  return labels.filter((label: string) => {
+      const branchWithoutPrefix = branch.replace('-release', '')
+      return label.includes(branchWithoutPrefix)
+  })
+}
